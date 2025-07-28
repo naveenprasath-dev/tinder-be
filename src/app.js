@@ -8,8 +8,16 @@ const app = express();
 //     res.send("Hello");
 // })
 
+
+app.get("/abc", (req,res) => {
+    res.send("Naveenprasath");
+});
+
 // Only GET call
-app.get("/user", (req,res) => {
+app.get("/user/:userId/:firstName/:lastName", (req,res) => {
+    console.log(req.query);
+    console.log(req.params);
+
     res.send("Naveenprasath");
 })
 
