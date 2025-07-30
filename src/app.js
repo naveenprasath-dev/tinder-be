@@ -24,7 +24,6 @@ app.use(express.json());
 app.post("/signup", async (req, res) => {
     // creating a new instance of the user Model.
     const user = new User(req.body);
-
     try {
         newUser = await user.save();
         res.send(newUser);
@@ -104,7 +103,7 @@ app.patch("/user", async (req, res) => {
     // const user = new User(req.body);
 
     try {
-        newUser = await User.findByIdAndUpdate("6888ee6df382c9c52f4d514a", req.body, {returnDocument:"after"});
+        newUser = await User.findByIdAndUpdate("6888ee6df382c9c52f4d514a", req.body, {returnDocument:"after", runValidators: true});
         res.send(newUser);
     } catch (error) {
         res.status(500).send("Error adding user" + error.message);
