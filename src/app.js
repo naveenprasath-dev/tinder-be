@@ -1,11 +1,14 @@
 const express = require("express");
-const connectDB = require("../src/config/database");
-const app = express();
-
-const User = require("../src/models/user");
+const cookieParser = require("cookie-parser");
 const bcrypt = require('bcrypt');
 const validator = require("validator");
+
+const connectDB = require("../src/config/database");
+const app = express();
+const User = require("../src/models/user");
 const {validateSignUpData} = require("./utils/validation");
+const {userAuth} = require("./middlewares/auth");
+
 
 // Middlewares
 
@@ -15,6 +18,12 @@ const {validateSignUpData} = require("./utils/validation");
  * Pass back to request
  */
 app.use(express.json());
+
+/**
+ * Reads the cookie.
+ * 
+ */
+app.use(cookieParser());
 
 // API
 
@@ -67,12 +76,18 @@ app.post("/login", async(req, res) => {
             throw new Error("Invalid Creds");
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
+        const isPasswordValid = await user.validatePassword(password);
 
-        if (!isPasswordValid) {
-            throw new Error("Invalid Creds");
+        if (isPasswordValid) {
+          // this getJWT is a schema method, written in userSchema.
+          const token = await user.getJwt();
+          
+          // Add the token to the cookies. and send the response back to the user.
+          res.cookie("token" , token);
+          res.send("Logged In Successfully");
+        } else {
+          throw new Error("Invalid Creds");
         }
-        res.send("Logged In Successfully");
         
     } catch (error) {
         res.send("Error: " + error.message)
@@ -168,6 +183,37 @@ app.patch("/user/:userId", async (req, res) => {
     res.status(500).send("Error adding user" + error.message);
   }
 });
+
+
+// GET User.
+
+
+app.get("/user/profile",userAuth, async (req, res) => {
+  try {
+    
+    res.send(req.user);
+  } catch (error) {
+    res.status(500).send("Error fetching profile" + error.message);
+  }
+  
+})
+
+
+app.post("/send-connection-req", userAuth, async (req, res) => {
+
+
+  res.send(req.user.firstName + " sent the connection request!!!");
+});
+
+
+
+
+
+
+
+
+
+
 
 // DB connection
 connectDB()

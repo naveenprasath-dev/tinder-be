@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 var validator = require('validator');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
@@ -64,6 +67,21 @@ const userSchema = new Schema({
         type: [String]
     },
 }, { timestamps: true });
+
+
+// this is like attributes in laravel.
+userSchema.methods.getJwt = async function () {
+     // create a JWT Token.
+     const token = await jwt.sign({_id: this._id}, "Dev@tindersecretkey", {expiresIn: "1d"});
+     return token;
+}
+
+
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
+    // create a JWT Token.
+    const isValid = await bcrypt.compare(passwordInputByUser, this.password);
+    return isValid;
+}
 
 const User = mongoose.model("User", userSchema);
 
