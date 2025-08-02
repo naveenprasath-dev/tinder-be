@@ -6,6 +6,8 @@ const User = require("../src/models/user");
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
+const userRouter = require("./routes/user");
+
 
 
 
@@ -28,6 +30,8 @@ app.use(cookieParser());
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
+
 
 /**
  * Feed API - Get all data

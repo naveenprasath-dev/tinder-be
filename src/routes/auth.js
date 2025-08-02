@@ -19,7 +19,7 @@ router.post("/signup", async (req, res) => {
      validateSignUpData(req);
      //Encrypt the password.
      const saltRounds = 10;
-     const {firstName,lastName, emailId, password} = req.body;
+     const {firstName,lastName, emailId, password,age, gender, skills, photoUrl} = req.body;
   
      const passwordHash = await bcrypt.hash(password, 10);
     // creating a new instance of the user Model.
@@ -27,7 +27,11 @@ router.post("/signup", async (req, res) => {
           firstName, 
           lastName,
           emailId,
-          password: passwordHash
+          password: passwordHash,
+          age, 
+          gender, 
+          skills, 
+          photoUrl
       });
       newUser = await user.save();
       res.send(newUser);
