@@ -68,6 +68,7 @@ const userSchema = new Schema({
     },
 }, { timestamps: true });
 
+userSchema.index({firstName: 1})
 
 // this is like attributes in laravel.
 userSchema.methods.getJwt = async function () {

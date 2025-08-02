@@ -120,7 +120,7 @@ app.patch("/user/:userId", async (req, res) => {
 connectDB()
   .then(() => {
     app.listen(3001, () => {
-      console.log("server is listening");
+      console.log("server is listening in 3001");
     });
   })
   .catch(() => {
