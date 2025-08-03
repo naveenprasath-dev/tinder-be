@@ -19,7 +19,7 @@ profileRouter.get("/user/profile/view",userAuth, async (req, res) => {
 });
 
 
-profileRouter.patch("/user/profile/edit", userAuth, async (req, res) => {
+profileRouter.put("/user/profile/edit", userAuth, async (req, res) => {
   try {
     if (!validateEditProfileData(req)) {
       throw new Error("Invalid update fields");
@@ -31,7 +31,8 @@ profileRouter.patch("/user/profile/edit", userAuth, async (req, res) => {
     });
 
     await loggedInUser.save();
-    res.json(
+    
+    return res.json(
       {
         "message" : `${loggedInUser.firstName}, Your Profile is updated`,
         "status" : 201,
