@@ -14,7 +14,7 @@ const userAuth = async (req, res, next) => {
     const {token} = cookie;
 
    if (!token) {
-    throw new Error("Token Not Found");
+    res.status(401).send("Please Login");
    }
     const decodedObject = await jwt.verify(token, "Dev@tindersecretkey");
    
