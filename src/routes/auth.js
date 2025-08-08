@@ -34,7 +34,11 @@ router.post("/signup", async (req, res) => {
           photoUrl
       });
       newUser = await user.save();
-      res.send(newUser);
+      const token = await newUser.getJwt();
+      res.cookie("token" , token, {
+        expires: new Date(Date.now() + 8 * 3600000)
+      });
+      res.status(200).json({message:"User added Successfully", data: newUser });
     } catch (error) {
       res.status(500).send("Error adding user" + error.message);
     }
@@ -69,7 +73,9 @@ router.post("/login", async(req, res) => {
           const token = await user.getJwt();
           
           // Add the token to the cookies. and send the response back to the user.
-          res.cookie("token" , token);
+          res.cookie("token" , token, {
+            expires: new Date(Date.now() + 8 * 3600000)
+          });
           res.send(user);
         } else {
           throw new Error("Invalid Creds");

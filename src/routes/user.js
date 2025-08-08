@@ -16,7 +16,7 @@ router.get("/user/requests/received", userAuth, async (req, res) => {
         const connectionRequests = await ConnectionRequest.find({
             toUserId : loggedInUser._id,
             status: "interested"
-        }).populate("fromUserId", ["firstName", "lastName"]);
+        }).populate("fromUserId", ["firstName", "lastName", "age", "photoUrl", "about" ]);
 
         res.json({
             "message": "connection request list",
@@ -43,8 +43,8 @@ router.get("/user/requests/connections", userAuth, async (req, res) => {
                 {fromUserId : loggedInUser._id},
             ],
             status: "accepted",
-        }).populate("fromUserId", ["firstName", "lastName"])
-        .populate("toUserId", ["firstName", "lastName"]);
+        }).populate("fromUserId", ["firstName", "lastName", "age", "photoUrl", "about"])
+        .populate("toUserId", ["firstName", "lastName","age", "photoUrl", "about"]);
 
         const data = connectionRequests.map((row) => {
             // cannot compare the two  mongoDb id as it is an object.
