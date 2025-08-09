@@ -2,13 +2,13 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const connectDB = require("../src/config/database");
 const app = express();
+require("dotenv").config();
 const User = require("../src/models/user");
 const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const cors = require("cors");
-
 
 
 // Middlewares
