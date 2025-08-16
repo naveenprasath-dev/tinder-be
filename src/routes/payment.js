@@ -51,7 +51,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
 
 paymentRouter.post("/payment/webhook", async (req, res) => {
     const webhookBody = req.body;
-    const webhookSignature = req.header["x-razorpay-signature"];
+    const webhookSignature = req.header("x-razorpay-signature");
     try {
       const isWebhookValid  =  validateWebhookSignature(JSON.stringify(webhookBody), webhookSignature, process.env.RAZORPAY_WEBHOOK_SECRET);
       if (!isWebhookValid) {
@@ -89,6 +89,15 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
         
     }
 });
+
+paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
+    const user = req.user;
+    if (user.isPremium) {
+        return res.status(200).json({isPremium: true});
+    }
+
+    return res.status(200).json({isPremium: false});
+})
 
 
 module.exports = paymentRouter;
