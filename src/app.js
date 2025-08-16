@@ -8,11 +8,13 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
+const http = require("http");
 // const paymentRouter = require("./routes/payment");
 
 // commented cron job
 // require("./utils/cronJob");
 const cors = require("cors");
+const initializeSocket = require("./utils/socket");
 
 
 // Middlewares
@@ -49,7 +51,8 @@ app.use("/", userRouter);
 // app.use("/", paymentRouter);
 
 
-
+const server = http.createServer(app);
+initializeSocket(server);
 /**
  * Feed API - Get all data
  *
@@ -140,7 +143,7 @@ app.patch("/user/:userId", async (req, res) => {
 // DB connection
 connectDB()
   .then(() => {
-    app.listen(3001, () => {
+    server.listen(3001, () => {
       console.log("server is listening in 3001");
     });
   })
